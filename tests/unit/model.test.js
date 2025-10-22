@@ -8,29 +8,77 @@ describe('TodoService Unit Tests', () => {
         service = new TodoService();
         // This is a bit of a hack to reset the singleton for testing purposes
         service.todos = [];
+        service.observers = [];
     });
 
     test('should add a new todo', () => {
         // TODO: Call the addTodo method with some text.
         // Then, assert that the service's todos array has a length of 1.
         // Assert that the text of the first todo matches the input text.
+        
+        // Arrange
+        text = "some text"
+
+        // Act
+        service.addTodo(text);
+
+        // Assert
+        const todos = service.getTodos();
+        expect(todos).toHaveLength(1);
+        expect(todos[0].text).toBe(text);
+        expect(todos[0].completed).toBe(false);
     });
 
     test('should toggle the completed state of a todo', () => {
         // TODO: First, add a todo.
+
+        // Arrange
+        service.addTodo('Task to toggle');
+
         // Then, get its ID and call the toggleTodoComplete method.
+        // Act
+        const todos = service.getTodos();
+        const todoId = todos[0].id;
+        service.toggleTodoComplete(todoId);
+
         // Assert that the 'completed' property of that todo is now true.
+        // Assert
+        expect(todos[0].completed).toBe(true);
+
         // Call toggleTodoComplete again and assert that it's false.
+
+        // Act
+        service.toggleTodoComplete(todoId);
+
+        // Assert
+        expect(todos[0].completed).toBe(false);
     });
 
     test('should remove a todo', () => {
         // TODO: Add a todo.
+
+        // Arrange
+        service.addTodo('Task to be removed');
+
         // Get its ID and call the removeTodo method.
+
+        // Act
+        const todoId = service.getTodos()[0].id;
+        service.removeTodo(todoId);
+
         // Assert that the service's todos array is now empty (length of 0).
+        
+        // Assert
+        expect(service.getTodos()).toHaveLength(0);
+
     });
 
     test('should not add a todo if text is empty', () => {
         // TODO: Call addTodo with an empty string.
+        // Act
+        service.addTodo('');
         // Assert that the todos array still has a length of 0.
+        // Assert
+        expect(service.getTodos()).toHaveLength(0);
     });
 });
